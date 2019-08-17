@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --partition=batch
+#SBATCH -J hpc-test-br-br
+#SBATCH -o hpc-test-br-br.%J.out
+#SBATCH -e hpc-test-br-br.%J.err
+##SBATCH --mail-type=ALL
+#SBATCH --time=5:30:00
+#SBATCH --constraint=[local_500G]
+
+# Required software list:
+module load quantumespresso/6.2.1/openmpi2.1.1-gnu6.4.0
+module load gnuplot/5.0.0
+##module load  /sw/csi/modulefiles/applications/quantumespresso/6.2/openmpi-3.0.0-gnu-6.4.0
+#run the application:
+echo "This job run on $SLURM_NODELIST dated `date`"; 
+
+##sh run.sh
+mpirun -np 12 thermo_pw.x <scf.in>scf.out
+mpirun -np 12 epsilon_tpw.x <eps_control> eps.out
+exit
